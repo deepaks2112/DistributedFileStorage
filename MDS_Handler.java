@@ -1,4 +1,3 @@
-package distributedProject;
 
 
 import org.json.simple.JSONArray;
