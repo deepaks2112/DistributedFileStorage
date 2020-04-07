@@ -1,0 +1,18 @@
+{
+  "myfile": [[
+    "2",
+      "ff", "gg"
+    ],
+    [
+      "3",
+      "ffd", "gsg"
+    ]],
+  "myfile2": [[
+    "3",
+    "faaf", "gssg"
+  ],
+    [
+      "5",
+      "ffdss", "gsssg"
+    ]]
+}
