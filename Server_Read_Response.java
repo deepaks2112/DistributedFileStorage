@@ -1,5 +1,3 @@
-package distributedProject;
-
 import java.net.*;
 import java.io.*;
 
