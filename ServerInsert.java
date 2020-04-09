@@ -1,6 +1,7 @@
 // A Java program for a Server 
 import java.net.*; 
 import java.io.*; 
+import java.util.*;
 
 public class ServerInsert 
 { 
@@ -8,7 +9,7 @@ public class ServerInsert
 	private Socket socket = null; 
 	private ServerSocket server = null; 
 	private DataInputStream in = null; 
-
+	private final int SIZE=64*1024;
 	// constructor with port 
 	public ServerInsert(int port) 
 	{ 
@@ -22,22 +23,20 @@ public class ServerInsert
 				System.out.println("Client accepted"); 
 				// takes input from the client socket 
 				in = new DataInputStream( 
-					new BufferedInputStream(socket.getInputStream())); 
-				String line = ""; 
-				// reads message from client until "Over" is sent 
-				while (!line.equals("Over")) 
+					(socket.getInputStream())); 
+				byte[] bytes = new byte[SIZE];
+				try
+				{
+					while(in.read(bytes)!=-1){
+						System.out.print(new String(bytes)); 
+						Arrays.fill(bytes,(byte)0);
+					}
+					// System.out.println();
+				} 
+				catch(IOException i) 
 				{ 
-					try
-					{ 
-						line = in.readUTF(); 
-						System.out.println(line); 
-
-					} 
-					catch(IOException i) 
-					{ 
-						System.out.println(i); 
-						System.exit(0);
-					} 
+					System.out.println(i); 
+					System.exit(0);
 				} 
 				System.out.println("Closing connection"); 
 				// close connection 
