@@ -1,16 +1,17 @@
 import java.net.*; 
 import java.io.*; 
 import java.lang.*;
-  
-public class Insert 
+import java.util.*;
+
+public class ClientInsert 
 {
     // initialize socket and input output streams 
     private Socket socket = null; 
-    private DataInputStream input = null; 
+    private DataInputStream in = null; 
     private DataOutputStream out = null; 
-  
+    private final int SIZE=64*1024;
     // constructor to put ip address and port 
-    public Insert(String address, int port, int start_Idx, int num_of_blocks,String path) 
+    public ClientInsert(String address, int port, int start_Idx, int num_of_blocks,String path) 
     {
         // establish a connection 
         try
@@ -19,7 +20,7 @@ public class Insert
             System.out.println("Connected"); 
   
             // takes input from terminal 
-            // input  = new DataInputStream(System.in); 
+            // in  = new DataInputStream(System.in); 
   
             // sends output to the socket 
             out    = new DataOutputStream(socket.getOutputStream()); 
@@ -32,39 +33,23 @@ public class Insert
         {
             System.out.println(ioe); 
         }
-  
-        // string to read message from input 
-        String line = ""; 
-  
-        // keep reading until "Over" is input 
-        // while (!line.equals("Over")) 
-        // {
-        //     try
-        //     {
-        //         line = input.readLine(); 
-        //         out.writeUTF(line); 
-        //     }
-        //     catch(IOException i) 
-        //     {
-        //         System.out.println(i); 
-        //     }
-        // }
-        ///*
+        //byte array to read bytes from file
+        byte []bytes=new byte[SIZE];
         // keeping reading from the blocks until it gets over
         for( int i=start_Idx;i<start_Idx+num_of_blocks;i++){
             try{
-                BufferedReader br=new BufferedReader(new FileReader(new File(path+"Block"+i+".dss")));
-                line="";
-                    while((line=br.readLine())!=null){
+                    in=new DataInputStream(new FileInputStream(new File(path+"Block"+i+".dss")));
+                    while(in.read(bytes)!=-1){
                         try{
-                            out.writeUTF(line); 
+                            out.write(bytes); 
                         }
                         catch(IOException ioe){
                             System.out.println(ioe); 
                         }
+                        Arrays.fill(bytes,(byte)0);
                     }
                     try{
-                        out.writeUTF("One block Completed."); 
+                        out.write(("\nOne block Completed.\n").getBytes()); 
                     }
                     catch(IOException ioe){
                         System.out.println(ioe); 
@@ -73,25 +58,7 @@ public class Insert
             catch(IOException ioe){
                 System.out.println(ioe); 
             }
-            // catch(FileNotFoundException fe){
-            //     System.out.println(fe); 
-            // }
-            // catch(Exception e){
-            //     System.out.println("Other exception"+ e);
-            // }
         }
-        try{
-            out.writeUTF("Over"); 
-            // Thread.sleep(2000);
-        }
-        catch(IOException ioe){
-            System.out.println(ioe); 
-        }
-        // catch(InterruptedException ie){
-        //     System.out.println(ie); 
-        // }
-        //*/
-        
         // close the connection 
         try
         {
@@ -106,7 +73,7 @@ public class Insert
   
     public static void main(String args[]) 
     {
-        Insert client = new Insert("127.0.0.1", 5000,0,2,"/home/pramit/Desktop/NewFiles/"); 
-        client = new Insert("127.0.0.1", 5000,2,3,"/home/pramit/Desktop/NewFiles/"); 
+        ClientInsert client = new ClientInsert("127.0.0.1", 5000,0,2,"/home/pramit/Desktop/NewFiles/"); 
+        client = new ClientInsert("127.0.0.1", 5000,2,3,"/home/pramit/Desktop/NewFiles/"); 
     }
 } 
