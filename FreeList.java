@@ -5,8 +5,8 @@ import java.nio.channels.FileChannel;
 
 public class FreeList {
     private Metadata mt;
-    private static long freeblocks=20;
-    private final int DEFAULT=20;
+    private static final long DEFAULT=20;
+    private static long freeblocks=DEFAULT;
     private final String STOREDATA="freelist.txt";
     private final String BASEDIR="./files/";
     private final int SIZE=64*1024;
@@ -51,6 +51,9 @@ public class FreeList {
         }
         return status;
     }
+    public int updateData(){
+        return this.updateData(this.mt.getFilename(),this.freeblocks);
+    }
     public int updateData(long freeblocks){
         return this.updateData(this.mt.getFilename(),freeblocks);
     }
@@ -59,6 +62,7 @@ public class FreeList {
     }
     public int updateData(String filename,long freeblocks){
         this.mt.setFilename(filename);
+        this.freeblocks=freeblocks;
         int status=0;
         try {
             FileWriter fw=new FileWriter(BASEDIR+STOREDATA);
@@ -81,17 +85,23 @@ public class FreeList {
             return -1;
         freeblocks-=((doAllocate?1:-1)*blocklength);
         this.mt.setFilename(mt.getFilename());
-        this.mt.updateMetaData(true);
+        this.mt.updateMetaData(doAllocate);
         while(blocklength>1&&!this.mt.getNextfilename().equals("null")){
             this.mt.setFilename(this.mt.getNextfilename());
             this.mt.updateMetaData(doAllocate);
             blocklength--;
         }
+        // failure of half allocation may arise. Handle it later.
         if(blocklength>1)
             return -1;
+
         Metadata meta=new Metadata(this.mt.getFilename());
         this.mt.setFilename(this.mt.getNextfilename());
         meta.updateMetaData(endFileName,doAllocate);
+        if(doAllocate&&this.updateData()==-1){
+            System.out.println("Updation Failed");
+            return -1;
+        }
         return 1;
     }
 
@@ -113,5 +123,8 @@ public class FreeList {
 
     public byte[] getContent(){
         return this.mt.getContent();
+    }
+    public String getFilename(){
+        return this.mt.getFilename();
     }
 }
