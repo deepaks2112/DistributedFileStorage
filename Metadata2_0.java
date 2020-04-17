@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.io.File;
 
 public class Metadata {
     private String filename;
@@ -147,6 +148,11 @@ public class Metadata {
     }
     public int setFilename(String filename){
         this.filename=filename;
+        File file = new File(BASEDIR+filename);
+        if (!file.exists() || !file.isFile()){
+            System.out.println("Warning!! Metadata not updated. File doesn't exist");
+            return 1;
+        }
         int res;
         res=this.fetchMetaData();
         if(res==-1)
