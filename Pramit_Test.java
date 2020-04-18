@@ -1,7 +1,8 @@
 import java.util.*;
 import java.io.*;
 public class Test{
-	private String path="./files/";
+	// private String path="./files/";
+	private static String path="/home/pramit/Desktop/DistributedFileSystem/ServerFiles/S1/files/";
 	private byte[] content;
     private final int SIZE=64*1024;
     private Metadata MT=null;
@@ -102,29 +103,40 @@ public class Test{
 		// int i=new Scanner(System.in).nextInt();
 			mt[i]=new Metadata("Block"+i+".dss");
 			// tt.write(mt[i],(i<6)?"Block"+(i+1)+".dss":"null");
-			// tt.printInfo(mt[i]);
+			tt.printInfo(mt[i]);
 		}
-		// tt.write(mt[4],"Block5.dss");
-		// tt.printInfo(mt[4]);
+		int st;
+		FreeList fl=new FreeList("Block0.dss");
+		// fl.setPath(path);
+		// fl.updateData("Block0.dss",7);
+		
+		// mt[3].updateMetaData("Block4.dss");
+		// tt.printInfo(mt[6]);
 	////////////////////////////////////////////////////////////////
 		// tt.write();
 		// tt.read();
 		// tt.printInfo();
 		// tt.update();
 		// tt.printInfo();
-		///////////////////////////////////////
-		allocate(6l);
-		for(int i=0;i<7;i++)
-			 tt.printInfo(mt[i]);
-		allocate(1l);
-		for(int i=0;i<7;i++)
-			 tt.printInfo(mt[i]);
-		deallocate("Block6.dss",1l);
-		for(int i=0;i<7;i++)
-			 tt.printInfo(mt[i]);
-		deallocate("Block0.dss",6l);
-		for(int i=0;i<7;i++)
-			 tt.printInfo(mt[i]);
+	////////////////////////////////////////////////////////////////
+		// allocate(6l);
+		// for(int i=0;i<7;i++)
+		// 	 tt.printInfo(mt[i]);
+		// allocate(1l);
+		// for(int i=0;i<7;i++)
+		// 	 tt.printInfo(mt[i]);
+		// deallocate("Block4.dss",3l);
+		// for(int i=0;i<7;i++)
+		// 	 tt.printInfo(mt[i]);
+		// deallocate("Block0.dss",7l);
+		// for(int i=0;i<7;i++)
+		// 	 tt.printInfo(mt[i]);
+		st=fl.readFile();
+		if(st==-1){
+			System.out.println("Something Wrong1");
+			System.exit(0);
+		}
+		System.out.println(fl.getFreeblocks()+" "+fl.getFilename()+" "+fl.getNextfilename()+" "+fl.isInuse());
 	}
 	public static void allocate(long toAlloc){
 		int st;
@@ -146,10 +158,11 @@ public class Test{
 	}
 	public static void deallocate(String startfile,long toFree){
 		int st;
-		FreeList fl=new FreeList("Block0.dss");
+		FreeList fl=new FreeList("Block6.dss");
+		// fl.setPath(path);
 		FreeList temp=new FreeList(startfile);
 		FreeList fl1=new FreeList(startfile);
-		// st=fl.updateData(3);
+		// st=fl.updateData("Block6.dss",3);
 		st=fl.readFile();
 		long free=fl.getFreeblocks();
 		if(st==-1){
