@@ -12,14 +12,16 @@ public class Metadata {
     private String filename;
     private String nextfilename;
     private boolean inuse;
-    private final String BASEDIR="./files/";
+    private String BASEDIR="/home/pramit/Desktop/DistributedFileSystem/ServerFiles/S1/files/";
+    // private String BASEDIR="/home/pramit/Desktop/DistributedFileSystem/files/";
     private byte[] content;
     private final int SIZE=64*1024;
     private final long fixedOffset=4*1024;
     private final int METADATASIZE=4*1024;
 
     Metadata(String filename){
-        this.filename=filename;
+        // this.filename=filename;
+        this.setFilename(filename);
     }
 
 
@@ -162,4 +164,7 @@ public class Metadata {
             return -1;
         return 1;
     }
+    // public void setBaseDir(String path){
+    //     BASEDIR=path;
+    // }
 }
