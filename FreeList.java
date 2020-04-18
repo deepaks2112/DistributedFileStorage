@@ -8,7 +8,7 @@ public class FreeList {
     private static final long DEFAULT=20;
     private static long freeblocks=DEFAULT;
     private final String STOREDATA="freelist.txt";
-    private final String BASEDIR="./files/";
+    private String BASEDIR="/home/pramit/Desktop/DistributedFileSystem/ServerFiles/S1/files/";
     private final int SIZE=64*1024;
     private final long fixedOffset=4*1024;
     private final int METADATASIZE=4*1024;
@@ -81,8 +81,12 @@ public class FreeList {
     }
 
     public int reserve(long blocklength, boolean doAllocate, String endFileName){
-        if(doAllocate&&blocklength>freeblocks)
+        if(blocklength<=0)
+            return 1; // May need to change this later.
+        if(doAllocate&&blocklength>freeblocks){
+            System.out.println("blocklength > freeblocks");
             return -1;
+        }
         freeblocks-=((doAllocate?1:-1)*blocklength);
         this.mt.setFilename(mt.getFilename());
         this.mt.updateMetaData(doAllocate);
@@ -92,8 +96,10 @@ public class FreeList {
             blocklength--;
         }
         // failure of half allocation may arise. Handle it later.
-        if(blocklength>1)
+        if(blocklength>1){
+            System.out.println("blocklength>1");
             return -1;
+        }
 
         Metadata meta=new Metadata(this.mt.getFilename());
         this.mt.setFilename(this.mt.getNextfilename());
@@ -127,4 +133,10 @@ public class FreeList {
     public String getFilename(){
         return this.mt.getFilename();
     }
+    public int setFilename(String filename){
+        return this.mt.setFilename(filename);
+    }
+    // public void setPath(String path){
+    //     BASEDIR=path;
+    // }
 }
