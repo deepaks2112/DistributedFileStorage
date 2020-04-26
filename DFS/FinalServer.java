@@ -51,7 +51,7 @@ public class FinalServer{
         }
         System.out.println(fl.getFreeblocks()+" "+fl.getFilename()
                 +" "+fl.getNextfilename()+" "+fl.isInuse());
-        return -1;
+        return st;
     }
     public int deallocate(String startfile,long toFree){
         int st;
@@ -65,7 +65,7 @@ public class FinalServer{
             return -1;
         }
         System.out.println(fl.getFreeblocks()+" "+fl.getFilename()+" "+fl.getNextfilename()+" "+fl.isInuse());
-                st=fl1.reserve(toFree,false,""+fl.getFilename());
+        st=fl1.reserve(toFree,false,""+fl.getFilename());
         if(st==-1){
             System.out.println("Something Wrong2");
             return -1;
