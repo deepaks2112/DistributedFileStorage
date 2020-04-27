@@ -25,8 +25,8 @@ public class FreeList {
             String line;
             if((line=br.readLine())!=null){
                 String []arr=line.trim().split(" ");
-                this.freeblocks=Long.parseLong(arr[1]);
-                status=this.mt.setFilename(arr[0]);
+                this.freeblocks=Long.parseLong(arr[1].trim());
+                status=this.mt.setFilename(arr[0].trim());
             }
             else{
                 if(updateData(this.mt.getFilename(),freeblocks)==-1)
