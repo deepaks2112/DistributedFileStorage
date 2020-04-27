@@ -24,7 +24,7 @@ public class FreeList {
             br=new BufferedReader(new FileReader(new File(BASEDIR+STOREDATA)));
             String line;
             if((line=br.readLine())!=null){
-                String []arr=line.split(" ");
+                String []arr=line.trim().split(" ");
                 this.freeblocks=Long.parseLong(arr[1]);
                 status=this.mt.setFilename(arr[0]);
             }
